@@ -1,0 +1,3 @@
+[PHP]
+session.save_handler = redis
+session.save_path = "tcp://redis:${REDIS_PORT}?auth=${REDIS_PASSWORD}"

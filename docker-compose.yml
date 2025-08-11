@@ -1,0 +1,50 @@
+services:
+    nginx:
+        build:
+            context: ./docker/nginx
+        ports:
+            - "80:80"
+        depends_on:
+            - app
+        volumes:
+            - .:/var/www/html:ro
+        networks:
+            - network
+    app:
+        build:
+            context: ./
+        volumes:
+            - ./:/var/www/html
+        networks:
+            - network
+        depends_on:
+            - postgres
+            - memcached
+
+    postgres:
+        build:
+            context: ./docker/postgres
+        environment:
+            PGPASSWORD: '${DB_PASSWORD:-secret}'
+            POSTGRES_DB: '${DB_DATABASE}'
+            POSTGRES_USER: '${DB_USERNAME}'
+            POSTGRES_PASSWORD: '${DB_PASSWORD:-secret}'
+        volumes:
+            - postgres-data:/var/lib/postgresql/data
+        networks:
+            - network
+    memcached:
+        build:
+            context: ./docker/memcached
+        volumes:
+            - memcached-data:/data
+        networks:
+            - network
+
+networks:
+    network:
+        driver: bridge
+
+volumes:
+    postgres-data:
+    memcached-data:
