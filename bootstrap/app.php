@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Http\Middleware\RequireJsonAccept;
 use App\Http\Middleware\TransactionalSubstituteBindings;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -15,7 +16,9 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        $middleware->api(replace: [
+        $middleware->api(prepend: [
+            RequireJsonAccept::class
+        ], replace: [
             SubstituteBindings::class => TransactionalSubstituteBindings::class
         ]);
     })

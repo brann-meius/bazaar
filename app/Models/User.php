@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace App\Models;
 
 use Carbon\Carbon;
-use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Laravel\Sanctum\HasApiTokens;
 
 /**
  * @property int $id
@@ -22,7 +22,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  */
 class User extends Authenticatable
 {
-    /** @use HasFactory<UserFactory> */
+    use HasApiTokens;
     use HasFactory;
 
     protected $fillable = [
