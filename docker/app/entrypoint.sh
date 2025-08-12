@@ -1,8 +1,6 @@
 #!/bin/sh
 set -e
 
-envsubst < /usr/local/etc/php/conf.d/php.ini.template > /usr/local/etc/php/conf.d/php.ini
-
 composer dump-autoload --optimize
 
 for i in $(seq 1 10); do
@@ -13,14 +11,22 @@ for i in $(seq 1 10); do
   sleep 1
 done
 
+PENDING=false
 if ! grep -q '^APP_KEY=.\+' .env; then
   echo "Generating application key..."
   php artisan key:generate
   php artisan config:cache
   export $(grep ^APP_KEY= .env)
+  PENDING=true
 fi
 
 php artisan migrate --force --no-interaction
+
+if [ PENDING ]; then
+  echo "Running seeders..."
+  php artisan db:seed
+fi
+
 php artisan optimize
 
 php-fpm
