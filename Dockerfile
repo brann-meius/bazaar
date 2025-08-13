@@ -21,7 +21,7 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 COPY composer.json composer.lock artisan bootstrap/ ./
 
-RUN composer install --no-dev --no-autoloader
+RUN composer install --no-autoloader
 
 COPY . .
 COPY ./docker/app/entrypoint.sh /usr/local/bin/entrypoint.sh
