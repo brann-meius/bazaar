@@ -34,18 +34,27 @@ class TransactionalSubstituteBindings extends SubstituteBindings
             return parent::handle($request, $next);
         }
 
-        return DB::transaction(function () use ($request, $next, $route, $parameters) {
-            parent::handle($request, fn (Request $request): Request => $request);
+        DB::beginTransaction();
 
-            foreach ($parameters as $parameter => $class) {
-                $model = $route->parameter($parameter);
-                if ($model instanceof Model) {
-                    $this->bindAndLockParameter($route, $model, $parameter);
-                }
+        parent::handle($request, fn (Request $request): Request => $request);
+
+        foreach ($parameters as $parameter => $class) {
+            $model = $route->parameter($parameter);
+            if ($model instanceof Model) {
+                $this->bindAndLockParameter($route, $model, $parameter);
             }
+        }
 
-            return $next($request);
-        });
+        /** @var Response $response */
+        $response = $next($request);
+
+        if ($response->isClientError() || $response->isServerError()) {
+            DB::rollBack();
+        } else {
+            DB::commit();
+        }
+
+        return $response;
     }
 
     /**
