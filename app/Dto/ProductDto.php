@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Dto;
 
+use App\Models\Product;
+
 class ProductDto extends Dto
 {
     public function __construct(
@@ -13,6 +15,16 @@ class ProductDto extends Dto
         private(set) ?string $description = null,
     ) {
         //
+    }
+
+    public static function from(Product $product): ProductDto
+    {
+        return new ProductDto(
+            name: $product->name,
+            price: $product->price,
+            stockQuantity: $product->stock_quantity,
+            description: $product->description,
+        );
     }
 
     public function toArray(): array
@@ -38,7 +50,6 @@ class ProductDto extends Dto
 
         return $this;
     }
-
 
     public function setStockQuantity(int $stockQuantity): self
     {

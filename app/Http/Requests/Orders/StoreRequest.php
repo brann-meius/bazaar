@@ -14,9 +14,16 @@ class StoreRequest extends FormRequest
             'products' => [
                 'required',
                 'array',
+                'max:50',
             ],
-            'products.*' => [
+            'products.*.id' => [
                 'required',
+                'distinct',
+                'integer',
+            ],
+            'products.*.count' => [
+                'required',
+                'distinct',
                 'integer',
             ],
         ];

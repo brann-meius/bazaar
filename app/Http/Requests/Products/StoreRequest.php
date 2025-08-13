@@ -23,7 +23,7 @@ class StoreRequest extends FormRequest
                 'numeric',
                 'min:0.01',
                 'max:999999.99',
-                'decimal:0,2'
+                'decimal:0,2',
             ],
             'stock_quantity' => [
                 'required',

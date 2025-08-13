@@ -8,10 +8,20 @@ use App\Dto\ProductDto;
 use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Contracts\Pagination\Paginator;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Throwable;
 
 class ProductRepository
 {
+    public function list(array $ids, bool $lock = false): Collection
+    {
+        return Product::query()
+            ->whereIn('id', $ids)
+            ->when($lock, fn (Builder $builder): Builder => $builder->lockForUpdate())
+            ->get();
+    }
+
     public function paginate(): Paginator
     {
         return Product::query()

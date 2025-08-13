@@ -16,7 +16,8 @@ return new class extends Migration
                 ->nullable()
                 ->constrained()
                 ->nullOnDelete();
-            $table->decimal('total_amount', 12);
+            $table->decimal('total_amount', 12)
+                ->default('0.00');
             $table->timestamps();
 
             $table->index('created_at');

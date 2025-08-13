@@ -17,7 +17,8 @@ return new class extends Migration
             $table->foreignId('product_id')
                 ->constrained()
                 ->cascadeOnDelete();
-            $table->unsignedInteger('quantity');
+            $table->unsignedInteger('quantity')
+                ->default(0);
 
             $table->primary(['order_id', 'product_id']);
         });

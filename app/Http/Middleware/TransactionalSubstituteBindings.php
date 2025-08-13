@@ -35,7 +35,7 @@ class TransactionalSubstituteBindings extends SubstituteBindings
         }
 
         return DB::transaction(function () use ($request, $next, $route, $parameters) {
-            parent::handle($request, fn(Request $request): Request => $request);
+            parent::handle($request, fn (Request $request): Request => $request);
 
             foreach ($parameters as $parameter => $class) {
                 $model = $route->parameter($parameter);
