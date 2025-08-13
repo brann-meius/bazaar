@@ -24,7 +24,6 @@ COPY composer.json composer.lock artisan bootstrap/ ./
 RUN composer install --no-dev --no-autoloader
 
 COPY . .
-COPY ./docker/app/php.ini.template /usr/local/etc/php/conf.d/php.ini.template
 COPY ./docker/app/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
