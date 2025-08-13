@@ -14,7 +14,7 @@ services:
         build:
             context: ./
         volumes:
-            - ./:/var/www/html
+            - ./.env:/var/www/html/.env
         networks:
             - network
         depends_on:
